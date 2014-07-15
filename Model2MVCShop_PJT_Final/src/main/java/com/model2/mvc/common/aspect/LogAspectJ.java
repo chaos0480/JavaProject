@@ -7,7 +7,9 @@ import org.aspectj.lang.ProceedingJoinPoint;
  *	:: XML 에 선언적으로 aspect 의 적용   
   */
 public class LogAspectJ {
-
+	
+	//Field
+	
 	///Constructor
 	public LogAspectJ() {
 		System.out.println("\nCommon :: "+this.getClass()+"\n");
