@@ -1,12 +1,18 @@
 package com.market.farm.web.user;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.naming.spi.DirStateFactory.Result;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.aspectj.apache.bcel.generic.RET;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.market.farm.HomeController;
@@ -52,9 +59,10 @@ public class UserController {
 	int pageSize;
 
 	@RequestMapping(value = "/index.do", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Locale locale, Model model, HttpServletResponse response) throws IOException {
 		logger.info("Welcome home! The client locale is {}.", locale);
-		System.out.println("test test test test test");
+		System.out.println("index test...");
+
 		Date date = new Date();
 		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
 		
@@ -63,6 +71,34 @@ public class UserController {
 		model.addAttribute("serverTime", formattedDate );
 		
 		return "index";
+	}
+	
+	@RequestMapping(value = "/ajaxJson.do", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject ajaxJson(HttpServletResponse response) throws IOException{
+		
+		System.out.println("Jquery Ajax JSON Test...");
+		
+		/*
+		 * profileImg
+		 * endDate
+		prodImg
+		prodName
+		origin
+		price
+		unit*/
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("name", "박종호");
+		jsonObj.put("profileImg", "farmer.jpg");
+		jsonObj.put("endDate", "2014년 7월 18일");
+		jsonObj.put("prodImg", "apple.jpg");
+		jsonObj.put("prodName", "사과");
+		jsonObj.put("origin", "충남 당진");
+		jsonObj.put("price", new Integer("2000"));
+		jsonObj.put("unit", "개");
+		
+		
+		return jsonObj;
 	}
 	@RequestMapping("/checkDuplication.do")
 	public ModelAndView checkDuplication(@RequestParam("userId") String userId) throws Exception {
